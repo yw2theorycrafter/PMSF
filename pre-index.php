@@ -4,19 +4,16 @@ if (! file_exists('config/config.php')) {
     die("<h1>Config file missing</h1><p>Please ensure you have created your config file (<code>config/config.php</code>).</p>");
 }
 include('config/config.php');
-if ($noNativeLogin === false || $noDiscordLogin === false || $noFacebookLogin === false || $noPatreonLogin === false) {
-    if (isset($_COOKIE["LoginCookie"])) {
-        if (validateCookie($_COOKIE["LoginCookie"]) === false) {
-            header("Location: .");
-        }
+if ($noNativeLogin === false || $noDiscordLogin === false) {
+    //If we have a cookie, use it to connect to a past session.
+    $cookie = session_id();
+    if ( isset( $_COOKIE["LoginCookie"] ) ) {
+            $cookie = $_COOKIE["LoginCookie"];
     }
-    if (empty($_SESSION['user']->id) && $forcedLogin === true) {
-        header("Location: ./login?action=login");
-	die();
-    }
-    if (!empty($_SESSION['user']->updatePwd) && $_SESSION['user']->updatePwd === 1) {
-        header("Location: ./register?action=updatePwd");
-        die();
+    //Sets the login cookie on success, deletes it on failure.
+    if ( validateCookie( $cookie ) === false ) {
+        //header( "Location: ." );
+        //die();
     }
 }
 $zoom        = ! empty($_GET['zoom']) ? $_GET['zoom'] : null;
@@ -616,7 +613,7 @@ if (!$noLoadingScreen) {
             if (! $noPokestops) {
                 if (! $noQuests) {
                     ?>
-        <h3><?php echo i8ln('Pokéstops &amp; Quests'); ?></h3>
+        <h3><?php echo i8ln('Research tasks &amp; Team Rocket'); ?></h3>
                 <?php
                 } else {
                     ?>
@@ -640,7 +637,7 @@ if (!$noLoadingScreen) {
                 } ?>
                     <div id="pokestops-filter-wrapper" style="display:none">
                 <?php
-                if (! $noAllPokestops) {
+                if (! $noAllPokestops && false) {
                     echo '<div class="form-control switch-container" style="float:none;height:35px;margin-bottom:0px;">
                     <h3>' . i8ln('All Pokéstops') . '</h3>
                     <div class="onoffswitch">
@@ -669,7 +666,7 @@ if (!$noLoadingScreen) {
                 <?php
                 if (! $noTeamRocket) {
                     echo '<div class="form-control switch-container" style="float:none;height:35px;margin-bottom:0px;">
-                    <h3>' . i8ln('Team Rocket only') . '</h3>
+                    <h3>' . i8ln('Filter by Team Rocket') . '</h3>
                     <div class="onoffswitch">
                         <input id="rocket-switch" type="checkbox" name="rocket-switch"
                                class="onoffswitch-checkbox" checked>
@@ -680,20 +677,20 @@ if (!$noLoadingScreen) {
                     </div>
                 </div>';
                 } ?>
+                <?php
+                if (! $noTeamRocketTimer && ! $noTeamRocket) {
+                    echo '<div class="form-control switch-container" style="float:none;height:35px;margin-bottom:0px;">
+                    <h3>' . i8ln('Team Rocket Timer') . '</h3>
+                    <div class="onoffswitch">
+                    <input id="rocket-timer-switch" type="checkbox" name="rocket-timer-switch" class="onoffswitch-checkbox" checked>
+                    <label class="onoffswitch-label" for="rocket-timer-switch">
+                        <span class="switch-label" data-on="On" data-off="Off"></span>
+                        <span class="switch-handle"></span>
+                    </label>
+                </div>
+                </div>';
+                } ?>
                 <div id="rocket-wrapper" style="display:none">
-                    <?php
-                    if (! $noTeamRocketTimer && ! $noTeamRocket) {
-                        echo '<div class="form-control switch-container" style="float:none;height:35px;margin-bottom:0px;">
-                        <h3>' . i8ln('Team Rocket Timer') . '</h3>
-                        <div class="onoffswitch">
-                        <input id="rocket-timer-switch" type="checkbox" name="rocket-timer-switch" class="onoffswitch-checkbox" checked>
-                        <label class="onoffswitch-label" for="rocket-timer-switch">
-                            <span class="switch-label" data-on="On" data-off="Off"></span>
-                            <span class="switch-handle"></span>
-                        </label>
-                    </div>
-                    </div>';
-                    } ?>
                     <div id="grunt-tabs">
                         <ul>
                             <li><a href="#tabs-1"><?php echo i8ln('Hide Team Rocket') ?></a></li>
@@ -721,7 +718,7 @@ if (!$noLoadingScreen) {
                 <?php
                 if (! $noQuests) {
                     echo '<div class="form-control switch-container" style="float:none;height:35px;margin-bottom:0px;">
-                    <h3>' . i8ln('Quests only') . '</h3>
+                    <h3>' . i8ln('Filter by research') . '</h3>
                     <div class="onoffswitch">
                         <input id="quests-switch" type="checkbox" name="quests-switch"
                                class="onoffswitch-checkbox" checked>

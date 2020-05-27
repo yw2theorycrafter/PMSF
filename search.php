@@ -2,6 +2,15 @@
 include('config/config.php');
 global $map, $fork;
 
+#Validate cookie to kick people off map faster.
+    if ( !isset( $_COOKIE["LoginCookie"] ) || (validateCookie( $_COOKIE["LoginCookie"], false ) === false )) {
+            http_response_code(401);
+            die();
+    }
+#It actually checks here whether we are logged in or not. We need to do
+#this either way.
+include('config/config_loggedin.php');
+
 if ($noSearch === true) {
     http_response_code(401);
     die();

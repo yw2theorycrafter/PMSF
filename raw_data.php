@@ -3,6 +3,16 @@ $timing['start'] = microtime(true);
 include('config/config.php');
 global $map, $fork;
 
+#Validate cookie to kick people off map faster.
+
+    if ( !isset( $_COOKIE["LoginCookie"] ) || (validateCookie( $_COOKIE["LoginCookie"], false ) === false )) {
+            http_response_code(401);
+            die();
+    }
+#It actually checks here whether we are logged in or not. We need to do
+#this either way.
+include('config/config_loggedin.php');
+
 // set content type
 header('Content-Type: application/json');
 
@@ -72,17 +82,21 @@ if ($maxLatLng > 0 && ((($neLat - $swLat) > $maxLatLng) || (($neLng - $swLng) > 
     http_response_code(413);
     die();
 }
-$validity = validateToken($_POST['token']);
-if (!empty($validity)) {
-    switch ($validity) {
-        case 'invalid':
-            http_response_code(401);
-            break;
-        case 'no-id':
-            http_response_code(404);
-            break;
+
+if (!validateToken($_POST['token'])) {
+    http_response_code(400);
+    die();
+}
+
+/*
+if ((! $noDiscordLogin || ! $noNativeLogin) && !empty($_SESSION['user']->id)) {
+    $info = $manualdb->query("SELECT session_id FROM users WHERE id = :id", [":id" => $_SESSION['user']->id])->fetch();
+    if (empty($_COOKIE["LoginCookie"]) || $info['session_id'] !== $_COOKIE["LoginCookie"]) {
+        http_response_code(400);
+        die();
     }
 }
+*/
 
 $debug['0_after_auth'] = microtime(true) - $timing['start'];
 

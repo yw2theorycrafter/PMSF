@@ -63,6 +63,7 @@ class Manual
     public function query_nests($conds, $params)
     {
         global $manualdb;
+        global $logfile;
         $query = "SELECT nest_id,
         name,
         lat,

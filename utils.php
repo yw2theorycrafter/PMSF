@@ -262,22 +262,48 @@ function resetUserPassword($user, $password, $resetType)
     return true;
 }
 
-function destroyCookiesAndSessions()
+function updateExpireTimestamp($user, $login_system, $newExpireTimestamp)
 {
     global $manualdb;
-    
-    if (!empty($_SESSION['user']->id)) {
-        $manualdb->update("users", [
-            "session_id" => null,
-            "avatar" => null,
-            "discord_guilds" => null
-        ], [
-            "id" => $_SESSION['user']->id,
-            "login_system" => $_SESSION['user']->login_system
-        ]);
 
-        unset($_SESSION);
-    }
+    $manualdb->update("users", [
+        "expire_timestamp" => $newExpireTimestamp
+    ], [
+        "user" => $user,
+        "login_system" => $login_system
+    ]);
+
+    return true;
+}
+
+function updateAccessLevel($user, $login_system, $newAccessLevel)
+{
+    global $manualdb;
+
+    $manualdb->update("users", [
+        "access_level" => $newAccessLevel
+    ], [
+        "user" => $user,
+        "login_system" => $login_system
+    ]);
+
+    return true;
+}
+
+function destroyCookiesAndSessions($cookie)
+{
+    global $monocledb;
+    global $logfile;
+    
+    $monocledb->delete("users", [
+        "session_id" => $cookie
+    ]);
+    //$manualdb->update("users", [
+    //   "session_id" => null
+    //]);
+
+    unset($_SESSION);
+    file_put_contents($logfile, "Unsettinglogincookie\n", FILE_APPEND);
     unset($_COOKIE['LoginCookie']);
     unset($_COOKIE['LoginEngine']);
     unset($_COOKIE['LoginSession']);
@@ -288,11 +314,21 @@ function destroyCookiesAndSessions()
     session_write_close();
 }
 
-function validateCookie($cookie)
+function validateCookie($cookie, $destroyCookieOnFail = true)
 {
+<<<<<<< 123beb942246b7f1131e355eb74d0f1df6bde851
     global $manualdb, $manualAccessLevel, $sessionLifetime, $useLoginCookie;
     $info = $manualdb->query(
         "SELECT id, user, password, login_system, expire_timestamp, access_level, avatar, session_token FROM users WHERE session_id = :session_id", [
+=======
+    global $monocledb;
+    $q = "user";
+    if ($monocledb->info()['driver'] == 'pgsql') {
+        $q = "\"user\"";
+    }
+    $info = $monocledb->query(
+        "SELECT id, " . $q . ", ismod, issetupcomplete, password, login_system, expire_timestamp FROM users WHERE session_id = :session_id AND expire_timestamp > UNIX_TIMESTAMP(NOW())", [
+>>>>>>> Fairymaps specific tweaks
             ":session_id" => $cookie
         ]
     )->fetch();
@@ -302,15 +338,16 @@ function validateCookie($cookie)
         }
         $_SESSION['user'] = new \stdClass();
         $_SESSION['user']->id = $info['id'];
-        $_SESSION['user']->user = htmlspecialchars($info['user'], ENT_QUOTES, 'UTF-8');
-        $_SESSION['user']->avatar = !empty($info['avatar']) ? $info['avatar'] : 'static/images/avatar.png';
+        $_SESSION['user']->user = $info['user'];
+        $_SESSION['user']->ismod = $info['ismod'];
+        $_SESSION['user']->issetupcomplete = $info['issetupcomplete'];
         $_SESSION['user']->login_system = $info['login_system'];
         $_SESSION['user']->expire_timestamp = $info['expire_timestamp'];
-        $_SESSION['user']->access_level = $info['access_level'];
-        
+
         if (empty($info['password']) && $info['login_system'] == 'native') {
             $_SESSION['user']->updatePwd = 1;
         }
+<<<<<<< 123beb942246b7f1131e355eb74d0f1df6bde851
         setcookie("LoginCookie", $cookie, time() + $sessionLifetime);
         setcookie("LoginEngine", $info['login_system'], time() + $sessionLifetime);
         setcookie("LoginSession", $_SESSION['token'], time() + $sessionLifetime);
@@ -322,6 +359,15 @@ function validateCookie($cookie)
         }
     } else {
         destroyCookiesAndSessions();
+=======
+        setcookie("LoginCookie", $cookie, $info['expire_timestamp']);
+        return true;
+    } else {
+        //Why would you do this. There might be other sessions!
+        if ($destroyCookieOnFail){
+                destroyCookiesAndSessions($cookie);
+        }
+>>>>>>> Fairymaps specific tweaks
         return false;
     }
 }

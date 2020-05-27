@@ -567,3 +567,5 @@ $enableDebug = false;
 $map = "rdm";
 $fork = "default";                                                  // default/asner/sloppy
 $queryInterval = '5000';                                            // Interval between raw_data requests.
+
+$logfile = '/var/log/nginx/pmsf_members2.log';
