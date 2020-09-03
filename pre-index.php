@@ -426,11 +426,11 @@ if (!$noLoadingScreen) {
         } ?>
         
         <?php
-        if (!empty($_SESSION['user']->id)) {
-            echo "<a href='#' onclick='openAccountModal(event);' style='float:right;padding:0 5px;' title='" . i8ln('Profile') . "'><img src='" .  $_SESSION['user']->avatar . "' style='height:40px;width:40px;border-radius:50%;border:2px solid;vertical-align: middle;'></a>";
-        } else {
+        //if (!empty($_SESSION['user']->id)) {
+        //    echo "<a href='#' onclick='openAccountModal(event);' style='float:right;padding:0 5px;' title='" . i8ln('Profile') . "'><img src='" .  $_SESSION['user']->avatar . "' style='height:40px;width:40px;border-radius:50%;border:2px solid;margin-top:10px'></a>";
+        //} else {
             echo "<a href='#' onclick='openAccountModal(event);' style='float:right;padding:0 5px;' title='" . i8ln('Profile') . "'><i class='fas fa-user' style='color:white;font-size:20px;vertical-align:middle;'></i></a>";
-        }
+        //}
         ?>
     </header>
     <!-- NAV -->
@@ -1651,9 +1651,10 @@ if (!$noLoadingScreen) {
         <?php
         if (!empty($_SESSION['user']->id)) { ?>
             <div style="display:flex;">
-                <img src="<?php echo $_SESSION['user']->avatar; ?>" style="height:80px;width:80px;border-radius:50%;border:2px solid;position:relative;top:13px;">
+                <!--<img src="<?php echo $_SESSION['user']->avatar; ?>" style="height:80px;width:80px;border-radius:50%;border:2px solid;position:relative;top:13px;">
+                -->
                 <div style="position:relative;left:20px;font-size:13px;top:35px;">
-                    <b><?php echo $_SESSION['user']->user; ?></b>
+                    <b>Logged in as: <?php echo $_SESSION['user']->user; ?></b>
                 </div>
             </div>
             <div>

@@ -2568,6 +2568,7 @@ function getPokestopMarkerIcon(item) {
                 } else {
                     html += '<img src="' + rewardIcon + '" style="width:32px;height:auto;position:absolute;top:-40px;left:-15px;"/>' 
                 }
+            }
         }
         if (rocketTimerHtml != ''){
                 html += '<div style="position:absolute;top:0px;left:0px;">' + rocketTimerHtml + '</div>'
@@ -7746,4 +7747,3 @@ function getCookie(cname) {
     }
     return ''
 }
-//
