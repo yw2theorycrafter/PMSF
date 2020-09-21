@@ -1355,6 +1355,29 @@ function pokemonLabel(item) {
             '</div>'
         }
 
+        var pvpDetails = ''
+        if (item['pvp_rankings_great_league'] !== null){
+            var pvpRankings = JSON.parse(item['pvp_rankings_great_league']);
+            pvpRankings.forEach(function(pvpitem, index){
+                if (pvpitem["rank"] === null){
+                } else {
+                    pvpDetails += i8ln("Rank") + ' ' + pvpitem["rank"] + ' '+ i8ln("great league level as") + ' #' + pvpitem["pokemon"] + '<br>';
+                }
+            });
+        }
+        if (item['pvp_rankings_ultra_league'] !== null){
+            var pvpRankings = JSON.parse(item['pvp_rankings_ultra_league']);
+            pvpRankings.forEach(function(pvpitem, index){
+                if (pvpitem["rank"] === null){
+                } else {
+                    pvpDetails += i8ln("Rank") + ' ' + pvpitem["rank"] + ' '+ i8ln("ultra league level as ") + ' #' + pvpitem["pokemon"] + '<br>';
+                }
+            });
+        }
+        if (pvpDetails != ''){
+                pvpDetails = '<div>' + pvpDetails + '</div>';
+        }
+
         details +=
             '<div style="position:absolute;top:90px;left:80px;"><div>' +
             i8ln('IV') + ': <b>' + iv.toFixed(1) + '%</b> (<b>' + atk + '</b>/<b>' + def + '</b>/<b>' + sta + '</b>)' +
@@ -1362,6 +1385,7 @@ function pokemonLabel(item) {
             '<div>' + i8ln('CP') + ': <b>' + cp + '</b> | ' + i8ln('Level') + ': <b>' + pokemonLevel + '</b></div>' +
             '</div><br>' +
             '<div style="position:absolute;top:125px;">' +
+            pvpDetails + 
             '<div>' + i8ln('Quick') + ': <b>' + pMove1 + '</b>' + pMoveType1 + '</div>' +
             '<div>' + i8ln('Charge') + ': <b>' + pMove2 + '</b>' + pMoveType2 + '</div>' +
             '<div>' + i8ln('Weight') + ': <b>' + weight + '</b>' + ' | ' + i8ln('Height') + ': <b>' + height + '</b></div>' +
@@ -1422,6 +1446,7 @@ function pokemonLabel(item) {
     }
 
     contentstring += '<small>' + typesDisplay + '</small>' + '<br>' + details
+    contentstring += '<br> <br><br><br>'
     if (atk != null && def != null && sta != null && noCatchRates) {
         contentstring += '<center><div style="position:relative;top:55px;">'
     } else if (atk != null && def != null && sta != null && !noCatchRates) {

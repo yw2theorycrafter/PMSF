@@ -40,6 +40,12 @@ class RDM extends Scanner
             capture_3 AS catch_rate_3";
         }
 
+        #pvp info
+        $select .= ",
+                pvp_rankings_great_league,
+                pvp_rankings_ultra_league
+        ";
+
         $conds[] = "lat > :swLat AND lon > :swLng AND lat < :neLat AND lon < :neLng AND expire_timestamp > :time";
         $params[':swLat'] = $swLat;
         $params[':swLng'] = $swLng;
