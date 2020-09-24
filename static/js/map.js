@@ -18,6 +18,7 @@ var $switchOpenGymsOnly
 var $selectTeamGymsOnly
 var $selectLastUpdateGymsOnly
 var $switchActiveRaids
+var $switchMegaEnergy
 var $selectMinGymLevel
 var $selectMaxGymLevel
 var $selectMinRaidLevel
@@ -1144,6 +1145,7 @@ function initSidebar() {
     $('#raids-filter-wrapper').toggle(Store.get('showRaids'))
     $('#rocket-wrapper').toggle(Store.get('showRocket'))
     $('#active-raids-switch').prop('checked', Store.get('activeRaids'))
+    $('#mega-energy-switch').prop('checked', Store.get('megaEnergy'))
     $('#min-level-gyms-filter-switch').val(Store.get('minGymLevel'))
     $('#max-level-gyms-filter-switch').val(Store.get('maxGymLevel'))
     $('#min-level-raids-filter-switch').val(Store.get('minRaidLevel'))
@@ -1914,8 +1916,12 @@ function pokestopLabel(item) {
         '<div>' + stopName + '</div>' +
         '<div>' + stopImage
 
-    if (!noQuests && item['quest_type'] !== null && typeof questtypeList[item['quest_type']] !== 'undefined' && lastMidnight < Number(item['quest_timestamp'])) {
-        var questStr = getQuest(item)
+    if (!noQuests && item['quest_type'] !== null && lastMidnight < Number(item['quest_timestamp'])) {
+        if (typeof questtypeList[item['quest_type']] === 'undefined') {
+            var questStr = i8ln('Error: Undefined Quest Type') + ': ' + item['quest_type']
+        } else {
+            var questStr = getQuest(item)
+        }
         str += getReward(item) + '</div>' +
             '<div>' +
             i8ln('Quest') + ': <b>' +
@@ -1950,10 +1956,6 @@ function pokestopLabel(item) {
         }
     } else {
         str += '</div>'
-    }
-    if (!noQuests && item['quest_type'] !== null && typeof questtypeList[item['quest_type']] === 'undefined' && lastMidnight < Number(item['quest_timestamp'])) {
-        console.log('Undefined Quest Type: ' + item['quest_type'])
-        str += '<div>' + i8ln('Error: Undefined Quest Type') + ': ' + item['quest_type'] + '</div>'
     }
     if (!noLures && item['lure_expiration'] > Date.now()) {
         var lureType = '<img style="padding:5px;position:relative;left:0px;top:12px;height:40px;" src="static/forts/LureModule_' + item['lure_id'] + '.png"/>'
@@ -5411,6 +5413,8 @@ function pokestopMeetsQuestFilter(pokestop, lastMidnight) {
         return false
     } else if (pokestop['quest_reward_type'] === 3 && Store.get('showDustAmount') === 0) {
         return false
+    } else if (pokestop['quest_reward_type'] === 12 && !Store.get('megaEnergy')) {
+        return false
     } else {
         return true
     }
@@ -7585,6 +7589,15 @@ $(function () {
             setTimeout(function () { updateMap() }, 2000)
         }
     })
+
+    $switchMegaEnergy = $('#mega-energy-switch')
+
+    $switchMegaEnergy.on('change', function () {
+        Store.set('megaEnergy', this.checked)
+        lastpokestops = false
+        updateMap()
+    })
+
     $('#nestrange').on('input', function () {
         nestavg = $(this).val()
         Store.set('showNestAvg', nestavg)

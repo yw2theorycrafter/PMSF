@@ -144,6 +144,11 @@ var StoreOptions = {
             default: activeRaids,
             type: StoreTypes.Boolean
         },
+    'megaEnergy':
+        {
+            default: megaEnergy,
+            type: StoreTypes.Boolean
+        },
     'minRaidLevel':
         {
             default: minRaidLevel,

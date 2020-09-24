@@ -729,6 +729,23 @@ if (!$noLoadingScreen) {
                     </div>
                     </div>'; ?>
                     <div id="quests-filter-wrapper" style="display:none">
+                        <div class="dustslider">
+                <input type="range" min="0" max="2500" value="500" class="slider" id="dustrange">
+                <p><?php echo i8ln('Show stardust ') ?><span id="dustvalue"></span></p>
+                        </div>
+                        <div class="form-control switch-container"
+                        id="mega-energy-wrapper"
+                        style="float:none;height:35px;margin-bottom:0px;">
+                            <h3><?php echo i8ln('Mega energy rewards') ?></h3>
+                            <div class="onoffswitch">
+                                <input id="mega-energy-switch" type="checkbox" name="mega-energy-switch"
+                                       class="onoffswitch-checkbox" checked>
+                                <label class="onoffswitch-label" for="mega-energy-switch">
+                                    <span class="switch-label" data-on="On" data-off="Off"></span>
+                                    <span class="switch-handle"></span>
+                                </label>
+                            </div>
+                        </div>
                         <div id="quests-tabs">
                             <ul>
                                 <?php
@@ -819,10 +836,6 @@ if (!$noLoadingScreen) {
                                 </div>
                                 <?php
                             } ?>
-                        </div>
-                        <div class="dustslider">
-                <input type="range" min="0" max="2500" value="500" class="slider" id="dustrange">
-                <p><?php echo i8ln('Show stardust ') ?><span id="dustvalue"></span></p>
                         </div>
                     </div>
                 <?php
@@ -2286,6 +2299,7 @@ if (!$noLoadingScreen) {
     var notifyNotification = <?php echo $notifyNotification ?>;
     var enableRaids = <?php echo $noRaids ? 'false' : $enableRaids ?>;
     var activeRaids = <?php echo $activeRaids ?>;
+    var megaEnergy = <?php echo $megaEnergy ?>;
     var noActiveRaids = <?php echo $noActiveRaids === true ? 'true' : 'false' ?>;
     var noMinMaxRaidLevel = <?php echo $noMinMaxRaidLevel === true ? 'true' : 'false' ?>;
     var noTeams = <?php echo $noTeams === true ? 'true' : 'false' ?>;
