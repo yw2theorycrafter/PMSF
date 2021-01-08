@@ -1363,7 +1363,8 @@ function pokemonLabel(item) {
             pvpRankings.forEach(function(pvpitem, index){
                 if (pvpitem["rank"] === null){
                 } else {
-                    pvpDetails += i8ln("Rank") + ' ' + pvpitem["rank"] + ' '+ i8ln("great league level as") + ' #' + pvpitem["pokemon"] + '<br>';
+                    pvpDetails += i8ln("Rank") + ' ' + pvpitem["rank"] + ' '+
+                    i8ln("great league") + ' L' + pvpitem["level"] + ' ' + i8ln("as") + ' #' + pvpitem["pokemon"] + '<br>';
                 }
             });
         }
@@ -1372,7 +1373,8 @@ function pokemonLabel(item) {
             pvpRankings.forEach(function(pvpitem, index){
                 if (pvpitem["rank"] === null){
                 } else {
-                    pvpDetails += i8ln("Rank") + ' ' + pvpitem["rank"] + ' '+ i8ln("ultra league level as ") + ' #' + pvpitem["pokemon"] + '<br>';
+                    pvpDetails += i8ln("Rank") + ' ' + pvpitem["rank"] + ' '+
+                    i8ln("ultra league") + ' L' + pvpitem["level"] + ' ' + i8ln("as") + ' #' + pvpitem["pokemon"] + '<br>';
                 }
             });
         }
