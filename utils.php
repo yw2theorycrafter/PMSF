@@ -56,6 +56,7 @@ function generateToken()
 
 function validateToken($token)
 {
+    global $logfile;
     global $enableCsrf, $manualdb, $allowMultiLogin, $forcedLogin, $useLoginCookie, $sessionLifetime;
     if ((!$enableCsrf) || ($enableCsrf && isset($token) && $token === $_SESSION['token'])) {
         $validity = 'valid';
@@ -316,19 +317,10 @@ function destroyCookiesAndSessions($cookie)
 
 function validateCookie($cookie, $destroyCookieOnFail = true)
 {
-<<<<<<< 123beb942246b7f1131e355eb74d0f1df6bde851
-    global $manualdb, $manualAccessLevel, $sessionLifetime, $useLoginCookie;
-    $info = $manualdb->query(
-        "SELECT id, user, password, login_system, expire_timestamp, access_level, avatar, session_token FROM users WHERE session_id = :session_id", [
-=======
+    global $logfile;
     global $monocledb;
-    $q = "user";
-    if ($monocledb->info()['driver'] == 'pgsql') {
-        $q = "\"user\"";
-    }
     $info = $monocledb->query(
-        "SELECT id, " . $q . ", ismod, issetupcomplete, password, login_system, expire_timestamp FROM users WHERE session_id = :session_id AND expire_timestamp > UNIX_TIMESTAMP(NOW())", [
->>>>>>> Fairymaps specific tweaks
+        "SELECT id, user, ismod, issetupcomplete, password, login_system, expire_timestamp FROM users WHERE session_id = :session_id AND expire_timestamp > UNIX_TIMESTAMP(NOW())", [
             ":session_id" => $cookie
         ]
     )->fetch();
@@ -347,19 +339,6 @@ function validateCookie($cookie, $destroyCookieOnFail = true)
         if (empty($info['password']) && $info['login_system'] == 'native') {
             $_SESSION['user']->updatePwd = 1;
         }
-<<<<<<< 123beb942246b7f1131e355eb74d0f1df6bde851
-        setcookie("LoginCookie", $cookie, time() + $sessionLifetime);
-        setcookie("LoginEngine", $info['login_system'], time() + $sessionLifetime);
-        setcookie("LoginSession", $_SESSION['token'], time() + $sessionLifetime);
-        if (!isset($_SESSION['already_refreshed'])) {
-            $_SESSION['already_refreshed'] = true;
-            return false;
-        } else {
-            return true;
-        }
-    } else {
-        destroyCookiesAndSessions();
-=======
         setcookie("LoginCookie", $cookie, $info['expire_timestamp']);
         return true;
     } else {
@@ -367,7 +346,6 @@ function validateCookie($cookie, $destroyCookieOnFail = true)
         if ($destroyCookieOnFail){
                 destroyCookiesAndSessions($cookie);
         }
->>>>>>> Fairymaps specific tweaks
         return false;
     }
 }

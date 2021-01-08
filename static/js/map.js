@@ -260,6 +260,7 @@ L.Marker.addInitHook(function () {
 //
 // Functions
 //
+/*
 if (location.search.indexOf('login=true') > 0) {
     $('#nav').load(window.location.href + '#nav')
     window.location.href = '/'
@@ -267,6 +268,7 @@ if (location.search.indexOf('login=true') > 0) {
 if (location.search.indexOf('login=false') > 0) {
     openAccessDeniedModal()
 }
+*/
 if (copyrightSafe) {
     Store.set('icons', 'static/icons-safe/')
 } else if (Store.get('icons') === 'static/icons-safe/' || Store.get('icons') === '') {
@@ -3444,22 +3446,22 @@ function loadRawData() {
                 case 400:
                     toastr['error'](i8ln('Please check connectivity or reduce marker settings.'), i8ln('Not Acceptable'))
                     toastr.options = toastrOptions
-                    setTimeout(window.location.href = './logout', 5000)
+                    //setTimeout(window.location.href = './logout', 5000)
                     break
                 case 401:
-                    toastr['error'](i8ln('Another device just logged in with the same account.'), i8ln('Unauthorized'))
+                    toastr['error'](i8ln('Please log in.'), i8ln('Unauthorized'))
                     toastr.options = toastrOptions
-                    setTimeout(window.location.href = './login?action=login&error=invalid-token', 5000)
+                    //setTimeout(window.location.href = './login?action=login&error=invalid-token', 5000)
                     break
                 case 403:
                     toastr['error'](i8ln('This action is not allowed.'), i8ln('Forbidden'))
                     toastr.options = toastrOptions
-                    setTimeout(window.location.href = './logout', 5000)
+                    //setTimeout(window.location.href = './logout', 5000)
                     break
                 case 404:
                     toastr['error'](i8ln('Session tokens haven\'t been found.'), i8ln('Not found'))
                     toastr.options = toastrOptions
-                    setTimeout(window.location.href = './login?action=login&error=no-id', 5000)
+                    //setTimeout(window.location.href = './login?action=login&error=no-id', 5000)
                     break
                 case 413:
                     toastr['error'](i8ln('This is too much data for me please zoom in.'), i8ln('You got me overwhelmed'))
@@ -7773,7 +7775,7 @@ function updateUser() {
     }
     loadUser(engine).done(function (result) {
         if (result.action === 'reload') {
-            window.location.href = './logout?action=' + engine + '-logout&reason=change'
+            //window.location.href = './logout?action=' + engine + '-logout&reason=change'
         }
     })
 }
