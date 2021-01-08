@@ -73,10 +73,10 @@ if ($noDiscordLogin === false) {
             ]);
 
             #expire_timestamp used only to clean up unused sessions
-            #TODO cronjob for that
-            //$new_expire_timestamp = time() + 24 * 60 * 60 * 7;
+            #Expire monthly
+            $new_expire_timestamp = time() + 24 * 60 * 60 * 30;
             #Never expiring timestamps:
-            $new_expire_timestamp = time() + 24 * 60 * 60 * 9999;
+            #$new_expire_timestamp = time() + 24 * 60 * 60 * 9999;
             if ($count === 0) {
                 $monocledb->insert("users", [
                     "session_id" => session_id(),
