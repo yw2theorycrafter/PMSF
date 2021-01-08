@@ -319,6 +319,7 @@ function validateCookie($cookie, $destroyCookieOnFail = true)
 {
     global $logfile;
     global $monocledb;
+    global $useLoginCookie;
     $info = $monocledb->query(
         "SELECT id, user, ismod, issetupcomplete, password, login_system, expire_timestamp FROM users WHERE session_id = :session_id AND expire_timestamp > UNIX_TIMESTAMP(NOW())", [
             ":session_id" => $cookie
