@@ -3677,14 +3677,18 @@ function searchForItem(lat, lon, term, type, field) {
 function searchAjax(field) { // eslint-disable-line no-unused-vars
     var term = field.val()
     var type = field.data('type')
+    /*
     navigator.geolocation.getCurrentPosition(function (position) {
         searchForItem(position.coords.latitude, position.coords.longitude, term, type, field)
     }, function (err) {
         if (err) {
+    */
             var center = map.getCenter()
             searchForItem(center.lat, center.lng, term, type, field)
+    /*
         }
     })
+    */
 }
 
 function centerMapOnCoords(event) { // eslint-disable-line no-unused-vars
