@@ -1365,8 +1365,10 @@ function pokemonLabel(item) {
             pvpRankings.forEach(function(pvpitem, index){
                 if (pvpitem["rank"] === null){
                 } else {
+                    var pkmnName = '<a href="https://pokemon.gameinfo.io/' + languageSite + '/pokemon/' + pvpitem["pokemon"] + '" target="_blank" title="' + '">#' + pvpitem["pokemon"] + '</a>'
                     pvpDetails += i8ln("Rank") + ' ' + pvpitem["rank"] + ' '+
-                    i8ln("great league") + ' L' + pvpitem["level"] + ' ' + i8ln("as") + ' #' + pvpitem["pokemon"] + '<br>';
+                    i8ln("great league") + ' L' + pvpitem["level"] + ' ' + i8ln("as") + 
+                    ' ' + pkmnName + '<br>';
                 }
             });
         }
@@ -1375,8 +1377,10 @@ function pokemonLabel(item) {
             pvpRankings.forEach(function(pvpitem, index){
                 if (pvpitem["rank"] === null){
                 } else {
+                    var pkmnName = '<a href="https://pokemon.gameinfo.io/' + languageSite + '/pokemon/' + pvpitem["pokemon"] + '" target="_blank" title="' + '">#' + pvpitem["pokemon"] + '</a>'
                     pvpDetails += i8ln("Rank") + ' ' + pvpitem["rank"] + ' '+
-                    i8ln("ultra league") + ' L' + pvpitem["level"] + ' ' + i8ln("as") + ' #' + pvpitem["pokemon"] + '<br>';
+                    i8ln("ultra league") + ' L' + pvpitem["level"] + ' ' + i8ln("as") + 
+                    ' ' + pkmnName + '<br>';
                 }
             });
         }
